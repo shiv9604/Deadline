@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable, map, switchMap, takeWhile, timer } from 'rxjs';
 import { DeadlineService } from './deadline.service';
 import { CommonModule } from '@angular/common';
@@ -21,13 +21,14 @@ import { CommonModule } from '@angular/common';
 export class DeadlineComponent {
   private deadlineService = inject(DeadlineService);
 
+  // Fetch initial value once from backend and derive a countdown stream on the client.
+  // The stream completes automatically when the countdown reaches zero.
   public secondsLeft$: Observable<number> = this.deadlineService.getSecondsLeft().pipe(
-    switchMap((start:number) =>
+    switchMap(start =>
       timer(0, 1000).pipe(
-        map((secondsPassed:number) => start - secondsPassed),
-        takeWhile((remaining:number) => remaining >= 0)
+        map(secondsPassed => start - secondsPassed),
+        takeWhile(remaining => remaining >= 0)
       )
     )
   );
-
 }

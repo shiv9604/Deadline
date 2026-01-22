@@ -8,10 +8,11 @@ import { map, Observable } from 'rxjs';
 })
 export class DeadlineService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  public getSecondsLeft(): Observable<number>{
-    return this.http.get<DeadlineResponse>('/api/deadline').pipe(map((response:DeadlineResponse) => response.secondsLeft));
+  // Retrieves remaining seconds until the fixed deadline from the backend.
+  public getSecondsLeft(): Observable<number> {
+    return this.http.get<DeadlineResponse>('/api/deadline')
+      .pipe(map((response: DeadlineResponse) => response.secondsLeft));
   }
-
 }
